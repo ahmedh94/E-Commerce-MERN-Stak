@@ -1,4 +1,5 @@
 import { cartModel, ICart, ICartItem } from "../models/cartModel";
+import { IOrderItem, orderModel } from "../models/orderModel";
 import productModel from "../models/productModel";
 
 interface CreateCartFoUser {
@@ -177,4 +178,51 @@ const calculatCartTotalItems = ({ cartItems }: { cartItems: ICartItem[] }) => {
   }, 0);
 
   return total;
+};
+
+interface Checkout {
+  userId: string;
+  address: string;
+}
+
+export const checkout = async ({ userId, address }: Checkout) => {
+  const cart = await getActiveCartForUser({ userId });
+
+  if (!address) {
+    return { data: "Address is required!", statusCode: 400 };
+  }
+
+  const orderItems: IOrderItem[] = [];
+  //loop cartItems and create orderItemds
+
+  for (const item of cart.items) {
+    const product = await productModel.findById(item.product);
+
+    if (!product) {
+      return { data: "Product not found!", statusCode: 400 };
+    }
+
+    const orderItem: IOrderItem = {
+      productTitle: product.title,
+      productImage: product.image,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+    };
+    orderItems.push(orderItem);
+  }
+
+  const order = await orderModel.create({
+    orderItems,
+    total: cart.totalAmount,
+    address,
+    userId,
+  });
+
+  await order.save();
+
+  // Update the cart status to be completed
+  cart.status = "completed";
+  await cart.save();
+
+  return { data: order, statusCode: 200 };
 };
