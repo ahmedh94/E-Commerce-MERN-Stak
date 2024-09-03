@@ -23,32 +23,28 @@ const validateJWT = (req: ExtendRequest, res: Response, next: NextFunction) => {
     return;
   }
 
-  jwt.verify(
-    token,
-    "uNykFOJC9vBitNtaLP6UGc5BYmCzb2ix",
-    async (err, payload) => {
-      if (err) {
-        res.status(403).send("Invalid token");
-        return;
-      }
-
-      if (!payload) {
-        res.status(403).send("Invalid token payload");
-        return;
-      }
-
-      const userPayload = payload as {
-        email: string;
-        firstName: string;
-        lastName: string;
-      };
-
-      //Fetch user from database based on payload
-      const user = await userModel.findOne({ email: userPayload.email });
-      req.user = user;
-      next();
+  jwt.verify(token, process.env.JWT_SECRET || "", async (err, payload) => {
+    if (err) {
+      res.status(403).send("Invalid token");
+      return;
     }
-  );
+
+    if (!payload) {
+      res.status(403).send("Invalid token payload");
+      return;
+    }
+
+    const userPayload = payload as {
+      email: string;
+      firstName: string;
+      lastName: string;
+    };
+
+    //Fetch user from database based on payload
+    const user = await userModel.findOne({ email: userPayload.email });
+    req.user = user;
+    next();
+  });
 };
 
 export default validateJWT;
