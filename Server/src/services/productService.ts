@@ -14,6 +14,20 @@ export const seendInitialProducts = async () => {
         price: 14970,
         stock: 10,
       },
+      {
+        title: "samsung galaxy a55",
+        image:
+          "https://images.samsung.com/is/image/samsung/p6pim/eg/feature/165333549/eg-feature--nbsp-541836900?$FB_TYPE_A_MO_JPG$",
+        price: 20000,
+        stock: 5,
+      },
+      {
+        title: "samsung galaxy a25",
+        image:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFI1sJP67brEwuRhOGzLHbMxFsjsz7vTQMng&s",
+        price: 12000,
+        stock: 20,
+      },
       /*{ title: "Test Product", image: "image1.jpg", price: 10, stock: 100 },
     { title: "Product 1", image: "image1.jpg", price: 10, stock: 100 },
     { title: "Product 2", image: "image2.jpg", price: 20, stock: 80 },
@@ -28,7 +42,6 @@ export const seendInitialProducts = async () => {
     ];
 
     const existingProducks = await getAllProducts();
-
     if (existingProducks.length === 0) {
       await productModel.insertMany(products);
     }
