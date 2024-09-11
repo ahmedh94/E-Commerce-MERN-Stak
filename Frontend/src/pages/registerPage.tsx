@@ -1,9 +1,10 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Container from "@mui/material/Container";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { BASE_URL } from "../constants/baseUrl";
 
 const RegisterPage = () => {
+    const [error, setError] = useState("");
     const firstNameRef = useRef<HTMLInputElement>(null);
      const lastNameRef = useRef<HTMLInputElement>(null);
      const emailRef = useRef<HTMLInputElement>(null);
@@ -30,6 +31,12 @@ const RegisterPage = () => {
                 password,
             })
         })
+
+        if(!response.ok) {
+            setError("Unable to register user, please try different cresientials!")
+            return;
+        }
+
         const data = await response.json();
         console.log(data);
      }
@@ -46,6 +53,7 @@ const RegisterPage = () => {
                     <TextField inputRef={emailRef} type="email" label="Email" name="email" />
                     <TextField inputRef={passwordRef} type="password" label="Passwoed" name="password" />
                     <Button onClick={onSubmit} variant="contained">Register</Button>
+                    {error && <Typography sx={{ color: "red" }}>{error}</Typography>}
                 </Box>
             </Box>
             
