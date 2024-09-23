@@ -3,6 +3,7 @@ import HomePage from "./pages/home"
 import Navbar from "./components/navbar"
 import RegisterPage from "./pages/registerPage"
 import AuthProvider from "./context/Auth/AuthProvider"
+import LoginPage from "./pages/login"
 
 
 function App() {
@@ -14,8 +15,9 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter> 
     </AuthProvider>
   )
 }
